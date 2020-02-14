@@ -24,5 +24,5 @@ const  GetMainUI = (req, res) => {
 };
 
 router.get('/', GetMainUI);
-router.get('/stler')
+
 module.exports = router
