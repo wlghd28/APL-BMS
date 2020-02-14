@@ -9,7 +9,7 @@ const  router   = express.Router();
 const  GetTodayWorkSheet = (req, res) => {   
     let htmlStream = '';
 
-    htmlStream = fs.readFileSync(__dirname + '/../views/init.ejs','utf8');    // Header
+    htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); // add_today_work
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
@@ -24,7 +24,7 @@ const  GetTodayWorkSheet = (req, res) => {
 const  GetFutureWorkSheet = (req, res) => {   
     let htmlStream = '';
 
-    htmlStream = fs.readFileSync(__dirname + '/../views/init.ejs','utf8');    // Header
+    htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); // add_today_work
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공

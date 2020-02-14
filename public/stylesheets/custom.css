@@ -18,5 +18,5 @@
             #content-container { border: 1px solid #dee2e6; text-align: center; }
 
             /* today_worksheet.ejs */
-            #form-control-title { width: 300px; margin-top: 50px; }
-            #form-control-content { width: 400px; height: 300px; }
+            #worksheet-container { margin-top: 50px; width: 420px; text-align: center;}
+            #form-control-content { width: 420px; height: 300px; margin-bottom: 20px;}
