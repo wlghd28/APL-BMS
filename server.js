@@ -18,6 +18,7 @@ const   PORT = 3000;
 app.set('views', path.join(__dirname, 'views'));  // views경로 설정(ejs파일이 있는곳을 'view'로 가리킴)
 app.set('view engine', 'ejs');                    // view엔진 지정
 app.use(express.static(path.join(__dirname, 'public')));   // public설정
+app.use('/stylesheets', express.static(path.join(__dirname, 'public', 'stylesheets')));   // css설정
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
