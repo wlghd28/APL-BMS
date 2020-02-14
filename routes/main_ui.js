@@ -16,9 +16,13 @@ const  GetMainUI = (req, res) => {
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  // Footer
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(htmlStream, {'title' : '업무관리 프로그램'})); 
+    res.end(ejs.render(htmlStream, {
+                                        'title' : '업무관리 프로그램',
+                                        'url' : '../'
+                                    
+                                    })); 
 };
 
 router.get('/', GetMainUI);
-
+router.get('/stler')
 module.exports = router

@@ -13,9 +13,11 @@ const  GetTodayWorkSheet = (req, res) => {
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); // add_today_work
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(htmlStream, {'title' : '업무관리 프로그램'})); 
+    res.end(ejs.render(htmlStream, {
+                                        'title' : '업무관리 프로그램',
+                                        'url' : '../../'                                  
+                                    })); 
 };
 
 router.get('/', GetTodayWorkSheet);
-
 module.exports = router
