@@ -45,7 +45,7 @@ const  GetFutureWorkSheet = (req, res) => {
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(htmlStream, {
                                         'title' : '업무관리 프로그램',
-                                        'url' : '../../' })); 
+                                        'url' : '../../' })); // 지금 depth가 2이므로 ../../를 해준 것!
 };
 
 // 예정된 업무 등록을 처리합니다. 
