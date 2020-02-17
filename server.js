@@ -6,7 +6,7 @@ const   express = require('express');
 const   app = express();
 const   createError = require('http-errors');
 const   path = require('path');
-var os = require('os');
+const os = require('os');
 // BMS 개발소스 모듈
 const  mainUI       = require('./routes/main');
 const  userWork     = require('./routes/user_work');

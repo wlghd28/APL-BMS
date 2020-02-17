@@ -9,6 +9,7 @@ const   requestIp = require('request-ip');
 const   moment = require('moment');
 require('moment-timezone');
 
+
 router.use(bodyParser.urlencoded({ extended: false }));
 
 const   db = mysql.createConnection({
@@ -23,8 +24,6 @@ const   db = mysql.createConnection({
 const GetLoginPage = (req, res) => {
     let htmlStream = ''; 
     let ip_address;
-    ip_address = requestIp.getClientIp(req);
-    console.log(ip_address);
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  // 초기설정(부트스트랩/제이쿼리 등)
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/login.ejs','utf8'); // Content
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  // Footer
@@ -79,7 +78,6 @@ const HandleLogin = (req, res) => {
                         req.session.admin = true;
                     ip_address = requestIp.getClientIp(req);
                     console.log(ip_address);
-                    /*
                     // 접속로그를 남깁니다.
                     db.query(sql_str2, [moment().format('YYYY-MM-DD HH:mm:ss'), userid, username, ip_address], (error) => {
                         if (error) {     
@@ -89,7 +87,6 @@ const HandleLogin = (req, res) => {
                             console.log('Insertion into DB was completed!');
                         }
                     });   
-                    */
                     res.redirect('/userwork/inquire_worksheet');
                   }
                 }); /* foreach */
@@ -151,7 +148,6 @@ const HandleSignup = (req, res) => {
       }
     });
 };
-
 router.get('/login', GetLoginPage);
 router.get('/logout', HandleLogout);
 router.get('/signup', GetSignupPage);
