@@ -7,29 +7,29 @@
 }
 .container { padding-left: 0; padding-right: 0;}
 
-body{
-    background-color:rgba(255, 255, 255, 0.438);
-    font-size:14px;
-    color:rgb(0, 0, 0);
-} 
+body{ background-color:rgba(255, 255, 255, 0.438); font-size:14px; color:rgb(0, 0, 0); } 
+a{ text-decoration: none; }
 
 /* header.ejs */
 #header-container {margin-top: 30px; text-align: center;}
 
 /* nav.ejs */
 #nav-container { margin-top: 30px; }
-.nav-tabs .nav-link { padding: 10px 51px;}
+.nav-tabs .nav-link { padding: 10px 51px; }
 .nav-item { width: 172.5px; }
+.worksheet-btn { background-color: #53C175; border: 1px solid #53C175; }
 
 /* content.ejs */
-#content-container { border: 1px solid #dee2e6; text-align: center; }
+#content-container { border: 1px solid #dee2e6; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.438); }
 
 /* today_worksheet.ejs */
-#worksheet-container { margin-top: 50px; width: 420px; text-align: center;}
-#form-control-content { width: 420px; height: 300px; margin-bottom: 20px;}
+#worksheet-container { margin-top: 50px; width: 420px; text-align: center; }
+#form-control-content { width: 420px; height: 300px; margin-bottom: 20px; }
 
 /* login.ejs */
 .simple-login-container{ width: 300px; max-width: 100%; margin: 50px auto; }
-.simple-login-container h2{text-align: center; font-size: 20px; }
-.simple-login-container .btn-login{ background-color:#FF5964; color:#fff; }
-a{ text-decoration: none; }
+.simple-login-container h2{ text-align: center; font-size: 20px; }
+.simple-login-container .btn-login{ background-color:#53C175; color:#fff; }
+
+/* signup.ejs */
+#signup-btn { background-color: #53C175; border: 1px solid #53C175; }

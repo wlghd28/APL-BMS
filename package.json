@@ -2,7 +2,7 @@
   "name": "apl_bms",
   "version": "1.0.0",
   "description": "apl business management system",
-  "main": "index.js",
+  "main": "routes/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

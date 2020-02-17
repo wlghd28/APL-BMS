@@ -13,8 +13,8 @@ const GetLoginPage = (req, res) => {
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(htmlStream, {
-                                        'title' : '업무관리 프로그램',
-                                        'url' : '../' })); 
+                                        'title' : '로그인',
+                                        'url' : '../../' })); 
 };
 // 로그인을 처리합니다.
 const HandleLogin = (req, res) => {
@@ -40,11 +40,14 @@ const HandleLogout = (req, res) => {
 // 회원가입 페이지를 출력합니다.
 const GetSignupPage = (req, res) => {
     let htmlStream = ''; 
-    // 여기만 채우기
+
+    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/signup.ejs','utf8'); 
+    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(htmlStream, {
-                                        'title' : '업무관리 프로그램',
+                                        'title' : '회원가입',
                                         'url' : '../' }));
 };
 // 회원가입을 처리합니다.
