@@ -8,8 +8,9 @@ const   createError = require('http-errors');
 const   path = require('path');
 
 // BMS 개발소스 모듈
-const  mainUI        = require('./routes/main');
-const  userWork  = require('./routes/user_work');
+const  mainUI       = require('./routes/main');
+const  userWork     = require('./routes/user_work');
+const  user         = require('./routes/user');
 
 // BMS 전용 포트주소 설정
 const   PORT = 3000;
@@ -29,8 +30,9 @@ app.use(session({ key: 'sid',
                   saveUninitialized: true })); // 세션id사용전에는 발급금지
 
 // URI와 핸들러를 매핑
-app.use('/', mainUI);                     // URI (/) 접속하면 main_ui.ejs로 라우팅
-app.use('/userwork', userWork);
+app.use('/', mainUI);             // URI (/) 접속하면 main.js로 라우팅
+app.use('/userwork', userWork);   // URI (/userwork) 접속하면 user_work.js로 라우팅
+app.use('/user', user);           // URI (/user) 접속하면 user.js로 라우팅
 
 // 서버를 실행합니다.
 app.listen(PORT, function () {
