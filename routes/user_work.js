@@ -1,7 +1,18 @@
 const  express  = require('express');
 const  ejs      = require('ejs');
 const  fs       = require('fs');
+const  mysql    = require('mysql');
 const  router   = express.Router();
+
+/* 데이터베이스 연동 소스코드 */
+const db = mysql.createConnection({
+    host:       'localhost',        // DB서버 IP주소
+    port:       3000,               // DB서버 Port주소
+    user:       'root',         // DB접속 아이디
+    password:   'root',    // DB암호
+    database:   'work_management'        //사용할 DB명
+});
+
 
 // 업무 조회 페이지를 출력합니다.
 const GetInquireWorkSheet = (req, res) => {
