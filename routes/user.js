@@ -16,7 +16,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 /* 데이터베이스 연동 소스코드 */
 const db = mysql.createConnection({
     host:       'localhost',        // DB서버 IP주소
-    port:       3000,               // DB서버 Port주소
+    port:       3306,               // DB서버 Port주소
     user:       'root',         // DB접속 아이디
     password:   'root',    // DB암호
     database:   'work_management'        //사용할 DB명
@@ -47,7 +47,7 @@ const HandleLogin = (req, res) => {
 
       console.log(body.uid);
       console.log(body.pass);
-      //htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+      htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
       if (body.uid == '' || body.pass == '') {
          console.log("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
          res.status(562).end(ejs.render(htmlstream, { 'title': '알리미',
@@ -56,7 +56,7 @@ const HandleLogin = (req, res) => {
                                      'return_url':'/' }));
       }
       else {
-       sql_str = "SELECT user_id, user_pwd from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
+       sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
        sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(? ,? ,?, ?)";
        //console.log("SQL: " + sql_str);
        db.query(sql_str, (error, results, fields) => {
@@ -148,7 +148,7 @@ const HandleSignup = (req, res) => {
             } else {
                   res.end("error");
             }              
-      }
+        }
     });
 };
 router.get('/login', GetLoginPage);
