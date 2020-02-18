@@ -6,7 +6,7 @@ const   express = require('express');
 const   app = express();
 const   createError = require('http-errors');
 const   path = require('path');
-
+const os = require('os');
 // BMS 개발소스 모듈
 const  mainUI       = require('./routes/main');
 const  userWork     = require('./routes/user_work');
@@ -19,7 +19,8 @@ const   PORT = 3000;
 app.set('views', path.join(__dirname, 'views'));  // views경로 설정(ejs파일이 있는곳을 'view'로 가리킴)
 app.set('view engine', 'ejs');                    // view엔진 지정
 app.use(express.static(path.join(__dirname, 'public')));   // public설정
-app.use('/stylesheets', express.static(path.join(__dirname, 'public', 'stylesheets')));   // css설정
+app.use('/stylesheets', express.static(path.join(__dirname, 'public', 'stylesheets')));   // css 설정
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));   // image 설정
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,5 +37,23 @@ app.use('/user', user);           // URI (/user) 접속하면 user.js로 라우�
 
 // 서버를 실행합니다.
 app.listen(PORT, function () {
-       console.log('서버실행: http://localhost:' + PORT + '/');
+       let ip_address = getServerIp();
+       console.log('서버실행: http://' + ip_address +':' + PORT + '/');
 });
+
+// 서버 ip 가져오는 함수
+function getServerIp() {
+       var ifaces = os.networkInterfaces();
+       var result = '';
+       for (var dev in ifaces) {
+           var alias = 0;
+           ifaces[dev].forEach(function(details) {
+               if (details.family == 'IPv4' && details.internal === false) {
+                   result = details.address;
+                   ++alias;
+               }
+           });
+       }
+     
+       return result;
+   }
