@@ -22,21 +22,22 @@ const db = mysql.createConnection({
 
 // 업무 조회 페이지를 출력합니다.
 const GetInquireWorkSheet = (req, res) => {
-    let htmlStream = ''; // 웹페이지를 구성하기 위한 목적으로 사용(init ~ footer까지, 현재는 초기화로 아무것도 없는 상태)
+    let htmlStream = ''; 
 
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  // 초기설정(부트스트랩/제이쿼리 등)
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     // Navigation
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); // Content
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  // Footer
+    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
+    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
+    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
+    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
     res.end(ejs.render(htmlStream, {
                                     'title' :'업무관리 프로그램',
-                                    'url'   :'../' })); 
+                                    'url'   :'../' }));
 };
 
 // 금주 업무 등록하는 페이지를 출력합니다.
 const  GetThisWorkSheet = (req, res) => {   
+<<<<<<< HEAD
     let htmlStream2 = '';
     htmlStream2 = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
     if(req.session.userid){
@@ -47,11 +48,28 @@ const  GetThisWorkSheet = (req, res) => {
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); // add_today_work
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+=======
+    let errorHtmlStream = '';
+    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+    
+    // 로그인에 성공했을 경우에만 업무 등록을 할 수 있음
+    if (req.session.userid) {
+        let sql_str     = "SELECT * FROM THIS_WORK WHERE user_id = ?";
+        let htmlStream  = '';
+    
+        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); 
+
+        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); 
+>>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
 
         db.query(sql_str, [req.session.userid], (error, results) => {
             if(error){
                 console.log(error);
                 res.end("error");
+<<<<<<< HEAD
             }else{
                 res.end(ejs.render(htmlStream, {
                     'title' :'업무관리 프로그램',
@@ -66,13 +84,40 @@ const  GetThisWorkSheet = (req, res) => {
             'warn_message'  :'로그인 정보가 없습니다.',
             'return_url'    :'/' }));  
 
+=======
+            } else {
+                if (results.length <= 0) {
+                    res.end(ejs.render(htmlStream, {
+                                                    'title' :'업무관리 프로그램',
+                                                    'url'   :'../../',
+                                                    'work'  :'등록된 내용이 없습니다' })); 
+                } else {
+                    res.end(ejs.render(htmlStream, {
+                                                    'title' :'업무관리 프로그램',
+                                                    'url'   :'../../',
+                                                    'work'  :results[0].work })); 
+                }
+            }
+        });
+    } else {
+        res.status(562).end(ejs.render(errorHtmlStream));  
+>>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
     }
 };
 // 금주 업무 등록을 처리합니다.
 const HandleThisWorkSheet = (req, res) => {
+<<<<<<< HEAD
     let htmlstream = '';
     htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
     if(req.session.userid){
+=======
+    let errorHtmlStream = '';
+    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
+    if (req.session.userid) {
+>>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
         console.log('금주 업무 등록 요청보냄');
         let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id = ?';
         let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
@@ -126,17 +171,14 @@ const HandleThisWorkSheet = (req, res) => {
                 }              
             }
         });
-    }else{
-            res.status(562).end(ejs.render(htmlstream, { 
-                                                        'title'         :'알리미',
-                                                        'warn_title'    :'금주 업무등록 오류',
-                                                        'warn_message'  :'로그인 정보가 없습니다.',
-                                                        'return_url'    :'/' }));  
+    } else {
+            res.status(562).end(ejs.render(errorHtmlStream));  
     }
 };
 
 // 예정된 업무를 등록하는 페이지를 출력합니다.
 const  GetFutureWorkSheet = (req, res) => {   
+<<<<<<< HEAD
     let htmlStream2 = '';
     htmlStream2 = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
     if(req.session.userid){
@@ -166,13 +208,51 @@ const  GetFutureWorkSheet = (req, res) => {
             'warn_message'  :'로그인 정보가 없습니다.',
             'return_url'    :'/' }));  
 
+=======
+    let errorHtmlStream = '';
+    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+    
+    if (req.session.userid) {
+        let sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+        let htmlStream = '';
+    
+        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');   
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); 
+
+        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
+
+        db.query(sql_str, [req.session.userid], (error, results) => {
+            if (error) {
+                console.log(error);
+                res.end("error");
+            } else {
+                if (results.length <= 0) {
+                    res.end(ejs.render(htmlStream, {
+                                                    'title' :'업무관리 프로그램',
+                                                    'url'   :'../../',
+                                                    'work'  :'등록된 내용이 없습니다' })); 
+                } else {
+                    res.end(ejs.render(htmlStream, {
+                                                    'title' :'업무관리 프로그램',
+                                                    'url'   :'../../',
+                                                    'work'  :results[0].work })); 
+                }
+            }
+        });
+    } else {
+        res.status(562).end(ejs.render(errorHtmlStream));  
+>>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
     }
 };
 
 // 예정된 업무 등록을 처리합니다. 
 const HandleFutureWorkSheet = (req, res) => {
-    let htmlstream = '';
-    htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    let errorHtmlStream = '';
+    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
     if (req.session.userid) {
         console.log('예정된 업무 등록 요청보냄');
@@ -227,16 +307,12 @@ const HandleFutureWorkSheet = (req, res) => {
             }
         });
     } else {
-        res.status(562).end(ejs.render(htmlstream, { 
-                                                    'title'         :'알리미',
-                                                    'warn_title'    :'예정된 업무등록 오류',
-                                                    'warn_message'  :'로그인 정보가 없습니다.',
-                                                    'return_url'    :'/' }));  
+        res.status(562).end(ejs.render(errorHtmlStream));  
     }
 };
 
 router.get('/inquire_worksheet', GetInquireWorkSheet);
-router.get('/today_worksheet', GetThisWorkSheet);
+router.get('/this_worksheet', GetThisWorkSheet);
 router.get('/future_worksheet', GetFutureWorkSheet);
 router.post('/upload_this_worksheet', HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
