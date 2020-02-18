@@ -1,7 +1,27 @@
 <div id="future-worksheet-container" class="container">
-    <h2>예정 업무 일지</h2>
-    <form role="form">
-        <input id="form-control-content" class="form-control" type="text" placeholder="예정 업무사항을 입력해주세요!">
-        <input type="submit" class="btn btn-primary btn-block" value="저장하기">
-    </form>
-</div>   
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="container">
+                <h2>예정 업무 일지</h2>
+                <form role="form" method="POST" action="/userwork/upload_future_worksheet">
+                    <textarea id="future-textarea" name="work" class="form-control" placeholder="예정된 업무를 입력해주세요!"></textarea>
+                    <input type="submit" class="btn btn-primary btn-block" value="저장하기">
+                </form>
+            </div>   
+        </div>
+        <div class="col-sm-6">
+            <div class="container">
+                <h2>등록된 예정 업무</h2>
+                <div class="table-responsive">
+                    <table id="registed-worksheet-table" border="1">
+                        <tbody>
+                            <tr>
+                                <td><%=work%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>   
+        </div>
+    </div>
+</div>

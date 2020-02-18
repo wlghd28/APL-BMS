@@ -3,25 +3,10 @@
         <div class="col-sm-6">
             <div class="container">
                 <h2>금주 업무 일지</h2>
-                <form role="form" method = "POST" action = "/userwork/upload_this_worksheet">
-                    <textarea id="form-control-content" name = "work" class="form-control" placeholder="금일 업무를 입력해주세요!"></textarea>
+                <form role="form" method="POST" action="/userwork/upload_this_worksheet">
+                    <textarea id="this-textarea" name="work" class="form-control" placeholder="금일 업무를 입력해주세요!"><%=work%></textarea>
                     <input type="submit" class="btn btn-primary btn-block" value="저장하기">
                 </form>
-            </div>   
-        </div>
-        <div class="col-sm-6">
-            <div class="container">
-                <h2>등록된 금주 업무</h2>
-                <!-- <input id="form-control-content" class="form-control" type="text" placeholder="예정된 금주 업무가 없습니다!"> -->
-                <div class="table-responsive">
-                    <table id="registed-worksheet-table" border="1">
-                        <tbody>
-                            <tr>
-                                <td><%=work></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>   
         </div>
     </div>
