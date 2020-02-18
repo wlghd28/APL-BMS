@@ -81,17 +81,7 @@ const HandleLogin = (req, res) => {
                      res.redirect('/user_work/inquire_worksheet');
                   }
                 }); /* foreach */
-                // 로그인 데이터를 접속로그 테이블에 삽입합니다.
-                ip_address = getClientIp(req);
-                db.query(sql_str2, [moment().format('YYYY-MM-DD HH:mm:ss'), userid, username, ip_address], (error) => {
-                    if (error) {     
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                           console.log('Insertion into DB was completed!');
-                    }   
-                  }
-                )} // else
+              }
             }  // else
        });
    }
