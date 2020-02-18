@@ -42,15 +42,19 @@ const HandleLogin = (req, res) => {
       let userid, userpass, username;
       let sql_str, sql_str2;
       let ip_address;
-      let htmlstream = '';
+      let htmlStream = '';
       moment.tz.setDefault("Asia/Seoul");
 
       console.log(body.uid);
       console.log(body.pass);
-      htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+      
+      htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+      htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+      htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
+  
       if (body.uid == '' || body.pass == '') {
          console.log("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
-         res.status(562).end(ejs.render(htmlstream, { 'title': '알리미',
+         res.status(562).end(ejs.render(htmlStream, { 'title': '알리미',
                                      'warn_title':'로그인 오류',
                                      'warn_message':'아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.',
                                      'return_url':'/' }));
@@ -63,7 +67,7 @@ const HandleLogin = (req, res) => {
          if (error) { res.status(562).end("Login Fail as No id in DB!"); }
          else {
             if (results.length <= 0) {  // select 조회결과가 없는 경우 (즉, 등록계정이 없는 경우)
-                  res.status(562).end(ejs.render(htmlstream, { 'title': '알리미',
+                  res.status(562).end(ejs.render(htmlStream, { 'title': '알리미',
                                      'warn_title':'로그인 오류',
                                      'warn_message':'등록된 계정이나 암호가 틀립니다.',
                                      'return_url':'/' }));
@@ -79,8 +83,8 @@ const HandleLogin = (req, res) => {
                     req.session.who = username; // 인증된 사용자명 확보 (로그인후 이름출력용)
                     if (body.uid == 'admin')    // 만약, 인증된 사용자가 관리자(admin)라면 이를 표시
                         req.session.admin = true;
-                    //ip_address = requestIp.getClientIp(req);
-                    //console.log(ip_address);
+                    ip_address = requestIp.getClientIp(req);
+                    console.log(ip_address);
                     // 접속로그를 남깁니다.
                     db.query(sql_str2, [moment().format('YYYY-MM-DD HH:mm:ss'), userid, username, ip_address], (error) => {
                         if (error) {     
@@ -99,11 +103,13 @@ const HandleLogin = (req, res) => {
       });
    }
 };
+
 // 로그아웃을 처리합니다.
 const HandleLogout = (req, res) => {
     req.session.destroy();     // 세션을 제거하여 인증오작동 문제를 해결
     res.redirect('/user/login');         // 로그아웃후 메인화면으로 재접속
 }
+
 // 회원가입 페이지를 출력합니다.
 const GetSignupPage = (req, res) => {
     let htmlStream = ''; 
@@ -117,6 +123,7 @@ const GetSignupPage = (req, res) => {
                                         'title' : '회원가입',
                                         'url' : '../' }));
 };
+
 // 회원가입을 처리합니다.
 const HandleSignup = (req, res) => {
     console.log('회원가입 요청 보냄');
