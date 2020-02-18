@@ -57,8 +57,15 @@ const HandleThisWorkSheet = (req, res) => {
     let userid = req.session.id;
     //let username = req.session.who;
     let start_date, end_date;
+    let today = moment().day();
     let work = body.work;
+
+    start_date = moment().add('days', -today);
+    end_date = moment().add('days', (6 - today));
+
     console.log(req.body);
+    console.log(start_date);
+    console.log(end_date);
     console.log('POST 데이터 받음');
 
     // 금주 업무 등록이 되어있는지 조사합니다.
@@ -67,7 +74,7 @@ const HandleThisWorkSheet = (req, res) => {
             console.log(error);
             res.end("error");
         } else {
-            
+
             // 금주 업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
             if (results[0] == null) {
                 db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
@@ -76,7 +83,7 @@ const HandleThisWorkSheet = (req, res) => {
                             console.log(error);
                         } else {
                             console.log('Insertion into DB was completed!');
-                            res.redirect('/user_work/inquire_worksheet');
+                            res.redirect('/userwork/inquire_worksheet');
                         }
                 }); // db.query();
             } else { // 금주 업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
@@ -86,9 +93,9 @@ const HandleThisWorkSheet = (req, res) => {
                         console.log(error);
                     } else {
                         console.log('update set DB was completed!');
-                        res.redirect('/user_work/inquire_worksheet');
+                        res.redirect('/userwork/inquire_worksheet');
                     }
-            }); // db.query();
+                }); // db.query();
             }              
       }
     });
