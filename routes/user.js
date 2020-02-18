@@ -37,7 +37,6 @@ const GetLoginPage = (req, res) => {
 };
 // 로그인을 처리합니다.
 const HandleLogin = (req, res) => {
-     
 };
 // 로그아웃을 처리합니다.
 const HandleLogout = (req, res) => {
