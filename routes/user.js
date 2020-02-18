@@ -130,7 +130,7 @@ const HandleSignup = (req, res) => {
             console.log(error);
             res.end("error");
         } else {
-            // 입력받은 데이터가 이메일 양식인지 판단합니다
+            // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null && password == confirm_password) {
                 db.query(sql_str2, [userid, password, username, 0], (error) => {
                         if (error) {
