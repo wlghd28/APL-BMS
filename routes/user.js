@@ -47,7 +47,7 @@ const HandleLogin = (req, res) => {
 
       console.log(body.uid);
       console.log(body.pass);
-      
+
       htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
       htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
       htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
@@ -79,7 +79,7 @@ const HandleLogin = (req, res) => {
                   console.log("DB에서 로그인성공한 ID/암호:%s/%s", userid, userpass);
                   if (body.uid == userid && body.pass == userpass) {
                     req.session.auth = 99;      // 임의로 수(99)로 로그인성공했다는 것을 설정함
-                    req.session.id = userid; 
+                    req.session.userid = userid; 
                     req.session.who = username; // 인증된 사용자명 확보 (로그인후 이름출력용)
                     if (body.uid == 'admin')    // 만약, 인증된 사용자가 관리자(admin)라면 이를 표시
                         req.session.admin = true;
