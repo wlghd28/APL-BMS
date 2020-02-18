@@ -37,6 +37,7 @@ const GetLoginPage = (req, res) => {
 };
 // 로그인을 처리합니다.
 const HandleLogin = (req, res) => {
+
     let body = req.body;
     let userid, userpass, username;
     let sql_str, sql_str2;
@@ -99,6 +100,7 @@ const HandleLogin = (req, res) => {
                                 }
                             });   
                             res.redirect('/userwork/inquire_worksheet');
+
                         }
                     }); /* foreach */
                     // 로그인 데이터를 접속로그 테이블에 삽입합니다.

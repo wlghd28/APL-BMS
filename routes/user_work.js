@@ -57,16 +57,19 @@ const HandleThisWorkSheet = (req, res) => {
         let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
         let sql_str3 = 'UPDATE THIS_WORK SET work = ? WHERE user_id = ?';
         let body = req.body;
-        let userid = req.session.id;
+        let userid = req.session.userid;
         //let username = req.session.who;
         let start_date, end_date;
         let today = moment().day();
         let work = body.work;
-        console.log(today);
-        start_date = moment().add('days', (-1) * today);
-        end_date = moment().add('days', (6 - today));
+
+
+        start_date = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
+        end_date = moment().add((6 - today), 'days').format("YYYY-MM-DD");
+
 
         console.log(req.body);
+        console.log(userid);
         console.log(start_date);
         console.log(end_date);
         console.log('POST 데이터 받음');
@@ -141,8 +144,9 @@ const HandleFutureWorkSheet = (req, res) => {
         let today = moment().day();
         let work = body.work;
 
-        start_date = moment().add('days', (-1) * today);
-        end_date = moment().add('days', (6 - today));
+        start_date = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
+        end_date = moment().add((6 - today), 'days').format("YYYY-MM-DD");
+
 
         console.log(req.body);
         console.log(start_date);
