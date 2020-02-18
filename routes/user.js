@@ -51,7 +51,7 @@ const HandleLogin = (req, res) => {
       htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
       htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
       htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
-
+  
       if (body.uid == '' || body.pass == '') {
          console.log("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
          res.status(562).end(ejs.render(htmlStream, { 'title': '알리미',
@@ -60,12 +60,12 @@ const HandleLogin = (req, res) => {
                                      'return_url':'/' }));
       }
       else {
-        sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
-        sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(? ,? ,?, ?)";
-        //console.log("SQL: " + sql_str);
-        db.query(sql_str, (error, results, fields) => {
-          if (error) { res.status(562).end("Login Fail as No id in DB!"); }
-          else {
+       sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
+       sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(? ,? ,?, ?)";
+       //console.log("SQL: " + sql_str);
+       db.query(sql_str, (error, results, fields) => {
+         if (error) { res.status(562).end("Login Fail as No id in DB!"); }
+         else {
             if (results.length <= 0) {  // select 조회결과가 없는 경우 (즉, 등록계정이 없는 경우)
                   res.status(562).end(ejs.render(htmlStream, { 'title': '알리미',
                                      'warn_title':'로그인 오류',
@@ -141,7 +141,7 @@ const HandleSignup = (req, res) => {
             console.log(error);
             res.end("error");
         } else {
-            // 입력받은 데이터가 이메일 양식인지 판단합니다
+            // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null && password == confirm_password) {
                 db.query(sql_str2, [userid, password, username, 0], (error) => {
                         if (error) {
@@ -155,7 +155,7 @@ const HandleSignup = (req, res) => {
             } else {
                   res.end("error");
             }              
-      }
+        }
     });
 };
 router.get('/login', GetLoginPage);
