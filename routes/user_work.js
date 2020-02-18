@@ -35,7 +35,7 @@ const GetInquireWorkSheet = (req, res) => {
                                         'url' : '../' })); 
 };
 
-// 금일 업무 등록하는 페이지를 출력합니다.
+// 금주 업무 등록하는 페이지를 출력합니다.
 const  GetThisWorkSheet = (req, res) => {   
     let htmlStream = '';
 
