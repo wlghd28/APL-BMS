@@ -37,54 +37,7 @@ const GetLoginPage = (req, res) => {
 };
 // 로그인을 처리합니다.
 const HandleLogin = (req, res) => {
-      let body = req.body;
-      let userid, userpass, username;
-      let sql_str, sql_str2;
-      let ip_address;
-      let htmlstream = '';
-      moment.tz.setDefault("Asia/Seoul");
-
-      console.log(body.uid);
-      console.log(body.pass);
-      //htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-      if (body.uid == '' || body.pass == '') {
-         console.log("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
-         res.status(562).end(ejs.render(htmlstream, { 'title': '알리미',
-                                     'warn_title':'로그인 오류',
-                                     'warn_message':'아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.',
-                                     'return_url':'/' }));
-      }
-      else {
-       sql_str = "SELECT user_id, user_pwd from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
-       sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name) VALUES(? ,? ,?)";
-       //console.log("SQL: " + sql_str);
-       db.query(sql_str, (error, results, fields) => {
-         if (error) { res.status(562).end("Login Fail as No id in DB!"); }
-         else {
-            if (results.length <= 0) {  // select 조회결과가 없는 경우 (즉, 등록계정이 없는 경우)
-                  res.status(562).end(ejs.render(htmlstream, { 'title': '알리미',
-                                     'warn_title':'로그인 오류',
-                                     'warn_message':'등록된 계정이나 암호가 틀립니다.',
-                                     'return_url':'/' }));
-             } else {  // select 조회결과가 있는 경우 (즉, 등록사용자인 경우)
-               results.forEach((item, index) => {
-                  userid = item.user_id;  
-                  userpass = item.user_pwd; 
-                  username = item.user_name;
-                  console.log("DB에서 로그인성공한 ID/암호:%s/%s", userid, userpass);
-                  if (body.uid == userid && body.pass == userpass) {
-                     req.session.auth = 99;      // 임의로 수(99)로 로그인성공했다는 것을 설정함
-                     req.session.id = userid; 
-                     req.session.who = username; // 인증된 사용자명 확보 (로그인후 이름출력용)
-                     if (body.uid == 'admin')    // 만약, 인증된 사용자가 관리자(admin)라면 이를 표시
-                          req.session.admin = true;
-                     res.redirect('/user_work/inquire_worksheet');
-                  }
-                }); /* foreach */
-              }
-            }  // else
-       });
-   }
+     
 };
 // 로그아웃을 처리합니다.
 const HandleLogout = (req, res) => {
