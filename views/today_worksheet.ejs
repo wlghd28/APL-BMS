@@ -3,7 +3,7 @@
         <div class="col-sm-6">
             <div class="container">
                 <h2>금주 업무 일지</h2>
-                <form role="form">
+                <form role="form" method = "POST" action = "/userwork/upload_this_worksheet">
                     <input id="form-control-content" class="form-control" type="text" placeholder="금일 업무를 입력해주세요!">
                     <input type="submit" class="btn btn-primary btn-block" value="저장하기">
                 </form>
@@ -17,7 +17,7 @@
                     <table id="registed-worksheet-table" border="1">
                         <tbody>
                             <tr>
-                                <td>WORK</td>
+                                <td><%=work></td>
                             </tr>
                         </tbody>
                     </table>

@@ -1,16 +1,16 @@
 // Node.JS 내외부 모듈추출
-const   cookieParser = require('cookie-parser');
-const   session = require('express-session');
-const   bodyParser = require('body-parser');
-const   express = require('express');
-const   app = express();
-const   createError = require('http-errors');
-const   path = require('path');
-const   os = require('os');
+const   cookieParser    = require('cookie-parser');
+const   session         = require('express-session');
+const   bodyParser      = require('body-parser');
+const   express         = require('express');
+const   app             = express();
+const   createError     = require('http-errors');
+const   path            = require('path');
+const   os              = require('os');
 // BMS 개발소스 모듈
-const  mainUI       = require('./routes/main');
-const  userWork     = require('./routes/user_work');
-const  user         = require('./routes/user');
+const   mainUI          = require('./routes/main');
+const   userWork        = require('./routes/user_work');
+const   user            = require('./routes/user');
 
 // BMS 전용 포트주소 설정
 const   PORT = 3000;
@@ -37,23 +37,23 @@ app.use('/user', user);           // URI (/user) 접속하면 user.js로 라우�
 
 // 서버를 실행합니다.
 app.listen(PORT, function () {
-       let ip_address = getServerIp();
-       console.log('서버실행: http://' + ip_address +':' + PORT + '/');
+    let ip_address = getServerIp();
+    console.log('서버실행: http://' + ip_address +':' + PORT + '/');
 });
 
 // 서버 ip 가져오는 함수
 function getServerIp() {
-       var ifaces = os.networkInterfaces();
-       var result = '';
-       for (var dev in ifaces) {
-           var alias = 0;
-           ifaces[dev].forEach(function(details) {
-               if (details.family == 'IPv4' && details.internal === false) {
-                   result = details.address;
-                   ++alias;
-               }
-           });
-       }
+        var ifaces = os.networkInterfaces();
+        var result = '';
+        for (var dev in ifaces) {
+            var alias = 0;
+            ifaces[dev].forEach(function(details) {
+                if (details.family == 'IPv4' && details.internal === false) {
+                    result = details.address;
+                    ++alias;
+                }
+            });
+        }
      
        return result;
     }
