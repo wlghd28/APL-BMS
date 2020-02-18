@@ -37,21 +37,42 @@ const GetInquireWorkSheet = (req, res) => {
 
 // 금주 업무 등록하는 페이지를 출력합니다.
 const  GetThisWorkSheet = (req, res) => {   
-    let htmlStream = '';
+    let htmlStream2 = '';
+    htmlStream2 = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    if(req.session.userid){
+        let sql_str = "SELECT * FROM THIS_WORK WHERE user_id = ?";
+        let htmlStream = '';
+    
+        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); // add_today_work
 
-    htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); // add_today_work
+        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
 
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(htmlStream, {
-                                    'title' :'업무관리 프로그램',
-                                    'url'   :'../../' })); 
+        db.query(sql_str, [req.session.userid], (error, results) => {
+            if(error){
+                console.log(error);
+                res.end("error");
+            }else{
+                res.end(ejs.render(htmlStream, {
+                    'title' :'업무관리 프로그램',
+                    'url'   :'../../',
+                    'work'  :results[0].work })); 
+            }
+        });
+    }else{
+        res.status(562).end(ejs.render(htmlStream2, { 
+            'title'         :'알리미',
+            'warn_title'    :'금주 업무등록 오류',
+            'warn_message'  :'로그인 정보가 없습니다.',
+            'return_url'    :'/' }));  
+
+    }
 };
 // 금주 업무 등록을 처리합니다.
 const HandleThisWorkSheet = (req, res) => {
     let htmlstream = '';
     htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    if(req.session.id){
+    if(req.session.userid){
         console.log('금주 업무 등록 요청보냄');
         let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id = ?';
         let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
@@ -116,15 +137,36 @@ const HandleThisWorkSheet = (req, res) => {
 
 // 예정된 업무를 등록하는 페이지를 출력합니다.
 const  GetFutureWorkSheet = (req, res) => {   
-    let htmlStream = '';
+    let htmlStream2 = '';
+    htmlStream2 = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    if(req.session.userid){
+        let sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+        let htmlStream = '';
+    
+        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); // add_today_work
 
-    htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); // add_today_work
+        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
 
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(htmlStream, {
-                                    'title' :'업무관리 프로그램',
-                                    'url'   :'../../' })); // 지금 depth가 2이므로 ../../를 해준 것!
+        db.query(sql_str, [req.session.userid], (error, results) => {
+            if(error){
+                console.log(error);
+                res.end("error");
+            }else{
+                res.end(ejs.render(htmlStream, {
+                    'title' :'업무관리 프로그램',
+                    'url'   :'../../',
+                    'work'  :results[0].work })); 
+            }
+        });
+    }else{
+        res.status(562).end(ejs.render(htmlStream2, { 
+            'title'         :'알리미',
+            'warn_title'    :'예정된 업무등록 오류',
+            'warn_message'  :'로그인 정보가 없습니다.',
+            'return_url'    :'/' }));  
+
+    }
 };
 
 // 예정된 업무 등록을 처리합니다. 
@@ -132,7 +174,7 @@ const HandleFutureWorkSheet = (req, res) => {
     let htmlstream = '';
     htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
 
-    if (req.session.id) {
+    if (req.session.userid) {
         console.log('예정된 업무 등록 요청보냄');
         let sql_str1 = 'SELECT * FROM FUTURE_WORK WHERE user_id = ?';
         let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
