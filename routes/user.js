@@ -12,13 +12,17 @@ require('moment-timezone');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
-const   db = mysql.createConnection({
-    host: 'localhost',        // DB서버 IP주소
-    port: 3306,               // DB서버 Port주소
-    user: 'root',            // DB접속 아이디
-    password: 'root',  // DB암호
-    database: 'work_management'         //사용할 DB명
+
+/* 데이터베이스 연동 소스코드 */
+const db = mysql.createConnection({
+    host:       'localhost',        // DB서버 IP주소
+    port:       3000,               // DB서버 Port주소
+    user:       'root',         // DB접속 아이디
+    password:   'root',    // DB암호
+    database:   'work_management'        //사용할 DB명
 });
+
+
 
 // 회원 로그인 화면을 출력합니다.
 const GetLoginPage = (req, res) => {
