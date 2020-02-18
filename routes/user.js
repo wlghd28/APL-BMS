@@ -23,7 +23,6 @@ const   db = mysql.createConnection({
 // 회원 로그인 화면을 출력합니다.
 const GetLoginPage = (req, res) => {
     let htmlStream = ''; 
-    let ip_address;
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  // 초기설정(부트스트랩/제이쿼리 등)
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/login.ejs','utf8'); // Content
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  // Footer
@@ -76,8 +75,8 @@ const HandleLogin = (req, res) => {
                     req.session.who = username; // 인증된 사용자명 확보 (로그인후 이름출력용)
                     if (body.uid == 'admin')    // 만약, 인증된 사용자가 관리자(admin)라면 이를 표시
                         req.session.admin = true;
-                    ip_address = requestIp.getClientIp(req);
-                    console.log(ip_address);
+                    //ip_address = requestIp.getClientIp(req);
+                    //console.log(ip_address);
                     // 접속로그를 남깁니다.
                     db.query(sql_str2, [moment().format('YYYY-MM-DD HH:mm:ss'), userid, username, ip_address], (error) => {
                         if (error) {     
@@ -91,9 +90,9 @@ const HandleLogin = (req, res) => {
                   }
                 }); /* foreach */
                 // 로그인 데이터를 접속로그 테이블에 삽입합니다.
-                } // else
-            }  // else
-       });
+            } // else
+        }  // else
+      });
    }
 };
 // 로그아웃을 처리합니다.
