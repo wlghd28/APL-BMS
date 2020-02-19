@@ -192,7 +192,7 @@ const HandleFutureWorkSheet = (req, res) => {
         let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
         let sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
         let body = req.body;
-        let userid = req.session.id;
+        let userid = req.session.userid;
         //let username = req.session.who;
         let start_date, end_date;
         let today = moment().day();
