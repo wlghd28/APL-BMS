@@ -3,7 +3,9 @@ const   mysql       = require('mysql');
 const   express     = require('express');
 const   router      = express.Router();
 
-/* 데이터베이스 연동 소스코드 */
+/* 
+    데이터베이스 연동 소스코드 
+*/
 const db = mysql.createConnection({
     host:       'localhost',        // DB서버 IP주소
     port:       3306,               // DB서버 Port주소
@@ -12,7 +14,9 @@ const db = mysql.createConnection({
     database:   'work_management'   //사용할 DB명
 });
 
-// 토요일에서 일요일이 넘어가는 자정이 될 경우 데이터를 백업합니다.
+/*
+    토요일에서 일요일이 넘어가는 자정이 될 경우 데이터를 백업합니다.
+*/
 const DataBackup = (req, res) => {
     cron.schedule('0, 0, 0, *, *, 0', () => {
         // 금주 업무 데이터를 지난 업무 데이터로 백업 시키는 과정
@@ -32,8 +36,8 @@ const DataBackup = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        if(results.length > 0){
-                            for(var i=0;i<results.length;i++){
+                        if (results.length > 0) {
+                            for(var i=0;i<results.length;i++) {
                                 db.query(sql_str2, [results[i].start_date, results[i].end_date, 
                                     results[i].user_id, results[i].work], (error) => {
                                     if (error) {
@@ -63,8 +67,8 @@ const DataBackup = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        if(results.length > 0){
-                            for(var i=0;i<results.length;i++){
+                        if(results.length > 0) {
+                            for(var i = 0; i < results.length; i++) {
                                 db.query(sql_str5, [results[i].start_date, results[i].end_date, 
                                     results[i].user_id, results[i].work], (error) => {
                                     if (error) {

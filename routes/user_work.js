@@ -10,8 +10,9 @@ const   async       = require('async');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
-
-/* 데이터베이스 연동 소스코드 */
+/* 
+    데이터베이스 연동 소스코드 
+*/
 const db = mysql.createConnection({
     host:       'localhost',        // DB서버 IP주소
     port:       3306,               // DB서버 Port주소

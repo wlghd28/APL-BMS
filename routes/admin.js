@@ -4,7 +4,9 @@ const  fs       = require('fs');
 const  mysql    = require('mysql');
 const  router   = express.Router();
 
-/* 데이터베이스 연동 소스코드 */
+/* 
+    데이터베이스 연동 소스코드 
+*/
 const db = mysql.createConnection({
     host:       'localhost',        // DB서버 IP주소
     port:       3306,               // DB서버 Port주소
@@ -14,21 +16,30 @@ const db = mysql.createConnection({
 });
 
 
-// 관리자 로그인 화면을 출력합니다.
+/*
+    관리자 로그인 화면을 출력합니다.
+*/
 const GetLoginPage_Admin = (req, res) => {
 
 };
 
-// 관리자 로그인을 처리합니다.
+/*
+    관리자 로그인을 처리합니다.
+*/
 const HandleLogin_Admin = (req, res) => {
 
 };
 
-// 관리자 로그아웃을 처리합니다.
+/*
+    관리자 로그아웃을 처리합니다.
+*/
 const HandleLogout_Admin = (req, res) => {
 
 };
-// 유저를 조회합니다.
+
+/*
+    유저를 조회합니다.
+*/
 const InquireUser = (req, res) => {
 
 };
