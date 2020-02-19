@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 
 <section id="inquire-worksheet-container" class="container">
+    
+    <!-- 지난 업무 -->
     <div class="tab-content px-1 pt-2">
         <div class="tab-pane" id="tab1">
-            <p>지난 일정 탭입니다.</p>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr class="table-primary">
+                            <th class="w-15">기간</th>
+                            <th class="w-75">업무 내용</th>
+                        </tr>
+                        <% lastWork.forEach(function (item, index) { %>
+                        <tr>
+                            <td><%=item.start_date%> ~ <%=item.end_date%></td>
+                            <td><%=item.work%></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        <!-- 금주업무 -->
         <div class="tab-pane active" id="tab2">
             <textarea id="inquire-this-textarea" class="form-control" placeholder="등록된 업무가 없습니다!" disabled><%=thisWork%></textarea>
         </div>
         
+        <!-- 예정업무 -->
         <div class="tab-pane" id="tab3">
             <textarea id="inquire-future-textarea" class="form-control" placeholder="등록된 업무가 없습니다!" disabled><%=futureWork%></textarea>
         </div>
+
+        <!-- 공지사항 -->
         <div class="tab-pane" id="tab4">
             <p>공지 사항 탭입니다.</p>
-            
         </div>
     </div>
 </section>
-
-
-
-<!-- <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <input class="form-control" type="text">
-                    <span class="badge badge-danger">삭제</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <input class="form-control" type="text">
-                    <span class="badge badge-danger">삭제</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <input class="form-control" type="text">
-                    <span class="badge badge-danger">삭제</span>
-                </li>
-            </ul> -->

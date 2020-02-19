@@ -27,10 +27,10 @@ const db = mysql.createConnection({
 const GetInquireWorkSheet = (req, res) => {
 
     if (req.session.userid) {
-        let last_sql_str = '';
-        let this_sql_str = "SELECT * FROM THIS_WORK WHERE user_id = ?";
-        let future_sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
-        let htmlStream = '';
+        let last_sql_str    = "SELECT * FROM LAST_WORK WHERE user_id = ?";
+        let this_sql_str    = "SELECT * FROM THIS_WORK WHERE user_id = ?";
+        let future_sql_str  = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+        let htmlStream      = '';
     
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
@@ -42,6 +42,21 @@ const GetInquireWorkSheet = (req, res) => {
 
         // 지난업무, 금주업무, 예정업무 동기화 처리를 하기 위함
         async.waterfall([
+            function(callback) {
+                db.query(last_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                        if (results.length <= 0)
+                            last_result = '없음';
+                        else {
+                            last_result = results;
+                        }
+                    }
+                });
+                callback(null);
+            },
             function(callback) {
                 db.query(this_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
@@ -70,10 +85,11 @@ const GetInquireWorkSheet = (req, res) => {
                         }
                     }
                     res.end(ejs.render(htmlStream, {
-                                                    'title' :'업무관리 프로그램',
-                                                    'url'   :'../../',
-                                                    'thisWork'  :this_result,
-                                                    'futureWork'  :future_result}));
+                                                    'title'         :'업무관리 프로그램',
+                                                    'url'           :'../../',
+                                                    'lastWork'      :last_result,
+                                                    'thisWork'      :this_result,
+                                                    'futureWork'    :future_result}));
                 });
                 callback(null);
             }
@@ -117,8 +133,8 @@ const  GetThisWorkSheet = (req, res) => {
                                                     'url'   :'../../'})); 
                 } else {
                     res.end(ejs.render(htmlStream, {
-                                                    'title' :'업무관리 프로그램',
-                                                    'url'   :'../../',
+                                                    'title'     :'업무관리 프로그램',
+                                                    'url'       :'../../',
                                                     'thisWork'  :results[0].work })); 
                 }
             }
@@ -227,9 +243,9 @@ const  GetFutureWorkSheet = (req, res) => {
                                                     'url'   :'../../'})); 
                 } else {
                     res.end(ejs.render(htmlStream, {
-                                                    'title' :'업무관리 프로그램',
-                                                    'url'   :'../../',
-                                                    'futureWork'  :results[0].work })); 
+                                                    'title'         :'업무관리 프로그램',
+                                                    'url'           :'../../',
+                                                    'futureWork'    :results[0].work })); 
                 }
             }
         });
