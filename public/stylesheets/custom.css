@@ -30,6 +30,8 @@ a:hover { text-decoration: none; }
 #inquire-worksheet-container { border: 1px solid #dee2e6; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.438); }
 #inquire-this-textarea { width: 680px; height: 340px; }
 #inquire-future-textarea { width: 680px; height: 340px; }
+.table {border-collapse:collapse; width:100%} 
+.table tbody{overflow-y:auto; overflow-x:hidden; float:left; height:500px; }
 
 
 /* today_worksheet.ejs */
