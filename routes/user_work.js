@@ -47,12 +47,8 @@ const GetInquireWorkSheet = (req, res) => {
                     if (error) {
                         console.log(error);
                         res.end("error");
-                    } else {
-                        if (results.length <= 0)
-                            last_result = '없음';
-                        else {
+                    } else{
                             last_result = results;
-                        }
                     }
                 });
                 callback(null);
@@ -84,10 +80,11 @@ const GetInquireWorkSheet = (req, res) => {
                             future_result = results[0].work;
                         }
                     }
+                    console.log(last_result);
                     res.end(ejs.render(htmlStream, {
                                                     'title'         :'업무관리 프로그램',
                                                     'url'           :'../../',
-                                                    'lastWork'      :last_result,
+                                                    lastWork        :last_result,
                                                     'thisWork'      :this_result,
                                                     'futureWork'    :future_result}));
                 });
