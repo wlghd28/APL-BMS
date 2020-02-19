@@ -129,7 +129,7 @@ const GetSignupPage = (req, res) => {
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(htmlStream, {'title' : '회원가입',
-                                    'url' : '../' }));
+                                    'url'   : '../' }));
 };
 
 /*
