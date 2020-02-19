@@ -37,18 +37,6 @@ const GetInquireWorkSheet = (req, res) => {
 
 // 금주 업무 등록하는 페이지를 출력합니다.
 const  GetThisWorkSheet = (req, res) => {   
-<<<<<<< HEAD
-    let htmlStream2 = '';
-    htmlStream2 = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    if(req.session.userid){
-        let sql_str = "SELECT * FROM THIS_WORK WHERE user_id = ?";
-        let htmlStream = '';
-    
-        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); // add_today_work
-
-        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-=======
     let errorHtmlStream = '';
     errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
     errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
@@ -63,28 +51,11 @@ const  GetThisWorkSheet = (req, res) => {
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); 
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); 
->>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
 
         db.query(sql_str, [req.session.userid], (error, results) => {
             if(error){
                 console.log(error);
                 res.end("error");
-<<<<<<< HEAD
-            }else{
-                res.end(ejs.render(htmlStream, {
-                    'title' :'업무관리 프로그램',
-                    'url'   :'../../',
-                    'work'  :results[0].work })); 
-            }
-        });
-    }else{
-        res.status(562).end(ejs.render(htmlStream2, { 
-            'title'         :'알리미',
-            'warn_title'    :'금주 업무등록 오류',
-            'warn_message'  :'로그인 정보가 없습니다.',
-            'return_url'    :'/' }));  
-
-=======
             } else {
                 if (results.length <= 0) {
                     res.end(ejs.render(htmlStream, {
@@ -101,23 +72,16 @@ const  GetThisWorkSheet = (req, res) => {
         });
     } else {
         res.status(562).end(ejs.render(errorHtmlStream));  
->>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
     }
 };
 // 금주 업무 등록을 처리합니다.
 const HandleThisWorkSheet = (req, res) => {
-<<<<<<< HEAD
-    let htmlstream = '';
-    htmlstream = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    if(req.session.userid){
-=======
     let errorHtmlStream = '';
     errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
     errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
     errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
     if (req.session.userid) {
->>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
         console.log('금주 업무 등록 요청보냄');
         let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id = ?';
         let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
@@ -178,37 +142,6 @@ const HandleThisWorkSheet = (req, res) => {
 
 // 예정된 업무를 등록하는 페이지를 출력합니다.
 const  GetFutureWorkSheet = (req, res) => {   
-<<<<<<< HEAD
-    let htmlStream2 = '';
-    htmlStream2 = fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    if(req.session.userid){
-        let sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
-        let htmlStream = '';
-    
-        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    // Header
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); // add_today_work
-
-        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-
-        db.query(sql_str, [req.session.userid], (error, results) => {
-            if(error){
-                console.log(error);
-                res.end("error");
-            }else{
-                res.end(ejs.render(htmlStream, {
-                    'title' :'업무관리 프로그램',
-                    'url'   :'../../',
-                    'work'  :results[0].work })); 
-            }
-        });
-    }else{
-        res.status(562).end(ejs.render(htmlStream2, { 
-            'title'         :'알리미',
-            'warn_title'    :'예정된 업무등록 오류',
-            'warn_message'  :'로그인 정보가 없습니다.',
-            'return_url'    :'/' }));  
-
-=======
     let errorHtmlStream = '';
     errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
     errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
@@ -243,7 +176,6 @@ const  GetFutureWorkSheet = (req, res) => {
         });
     } else {
         res.status(562).end(ejs.render(errorHtmlStream));  
->>>>>>> cfca517a54a6ce421c8678d0667b51447c1bd0da
     }
 };
 
@@ -260,7 +192,7 @@ const HandleFutureWorkSheet = (req, res) => {
         let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
         let sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
         let body = req.body;
-        let userid = req.session.id;
+        let userid = req.session.userid;
         //let username = req.session.who;
         let start_date, end_date;
         let today = moment().day();
