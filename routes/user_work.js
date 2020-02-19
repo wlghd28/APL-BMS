@@ -260,8 +260,8 @@ const HandleFutureWorkSheet = (req, res) => {
         let today = moment().day();
         let work = body.work;
 
-        start_date = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
-        end_date = moment().add((6 - today), 'days').format("YYYY-MM-DD");
+        start_date = moment().add(6 - today, 'days').format("YYYY-MM-DD");
+        end_date = moment().add(13 - today, 'days').format("YYYY-MM-DD");
 
 
         console.log(req.body);

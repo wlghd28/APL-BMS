@@ -3,15 +3,15 @@ const   cookieParser    = require('cookie-parser');
 const   session         = require('express-session');
 const   bodyParser      = require('body-parser');
 const   express         = require('express');
-const   app             = express();
 const   createError     = require('http-errors');
 const   path            = require('path');
 const   os              = require('os');
+const   app             = express();
 // BMS 개발소스 모듈
 const   mainUI          = require('./routes/main');
 const   userWork        = require('./routes/user_work');
 const   user            = require('./routes/user');
-
+const   data            = require('./routes/data');
 // BMS 전용 포트주소 설정
 const   PORT = 3000;
 
@@ -33,7 +33,7 @@ app.use(session({ key: 'sid',
 app.use('/', mainUI);             // URI (/) 접속하면 main.js로 라우팅
 app.use('/userwork', userWork);   // URI (/userwork) 접속하면 user_work.js로 라우팅
 app.use('/user', user);           // URI (/user) 접속하면 user.js로 라우팅
-
+app.use('/data', data);           // URI (/data) 접속하면 data.js로 라우팅
 // 서버를 실행합니다.
 app.listen(PORT, function () {
     let ip_address = getServerIp();
