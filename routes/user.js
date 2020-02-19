@@ -23,7 +23,9 @@ const db = mysql.createConnection({
 
 
 
-// 회원 로그인 화면을 출력합니다.
+/*
+    회원 로그인 화면을 출력합니다.
+*/
 const GetLoginPage = (req, res) => {
     let htmlStream = ''; 
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  // 초기설정(부트스트랩/제이쿼리 등)
@@ -36,32 +38,27 @@ const GetLoginPage = (req, res) => {
                                     'url' : '../../' })); 
 };
 
-// 로그인을 처리합니다.
+/*
+    로그인을 처리합니다.
+*/
 const HandleLogin = (req, res) => {
-
-    let body = req.body; // body에 login.ejs 폼으로부터 name값(uid, pass)이 넘어옴
+    let body = req.body; // body에 login.ejs 폼으로부터 name값(uid, pass)과 uid, pass의 value값이 넘어옴
     let userid, userpass, username;
     let sql_str, sql_str2;
     let ip_address;
     let htmlStream = '';
     moment.tz.setDefault("Asia/Seoul");
-
-    console.log("body: ", body); 
-    console.log(body.uid);
-    console.log(body.pass);
     
     htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
+
+    console.log('로그인된 아이디 : ', body.uid);
+    console.log('로그인된 패스워드 : ', body.pass);
   
     if (body.uid == '' || body.pass == '') {
         console.log("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
-        res.status(562).end(ejs.render(htmlStream, {
-                                                    'title'         :'알리미',
-                                                    'warn_title'    :'로그인 오류',
-                                                    'warn_message'  :'아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.',
-                                                    'return_url'    :'/',
-                                                    'url'           :'../../'}));
+        res.status(562).end(ejs.render(htmlStream));
     } else {
         sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
         sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(?, ?, ?, ?)";
@@ -71,23 +68,15 @@ const HandleLogin = (req, res) => {
                 res.status(562).end("Login Fail as No id in DB!"); 
             else {
                 if (results.length <= 0) {  // select 조회결과가 없는 경우 (즉, 등록계정이 없는 경우)
-                    res.status(562).end(ejs.render(htmlStream, {
-                                                                'title'         :'알리미',
-                                                                'warn_title'    :'로그인 오류',
-                                                                'warn_message'  :'등록된 계정이나 암호가 틀립니다.',
-                                                                'return_url'    :'/' ,
-                                                                'url'           :'../../'}));
+                    res.status(562).end(ejs.render(htmlStream));
                 } else {  // select 조회결과가 있는 경우 (즉, 등록사용자인 경우)
                     console.log("results: ", results);  
                     results.forEach((user_data, index) => { // results는 db로부터 넘어온 key와 value를 0번째 방에 객체로 저장함
-                        console.log("user_data: ", user_data);
                         userid    = user_data.user_id;  
                         userpass  = user_data.user_pwd; 
                         username  = user_data.user_name;
 
                         console.log("DB에서 로그인성공한 ID/암호 : %s/%s", userid, userpass);
-                        console.log("body.uid: ", userid);
-                        console.log("body.pass: ", userpass);
 
                         // 로그인이 성공한 경우
                         if (body.uid == userid && body.pass == userpass) {
@@ -119,14 +108,18 @@ const HandleLogin = (req, res) => {
    } // else
 };
 
-// 로그아웃을 처리합니다.
+/*
+    로그아웃을 처리합니다.
+*/
 const HandleLogout = (req, res) => {
     req.session.destroy();     // 세션을 제거하여 인증오작동 문제를 해결
     res.redirect('/user/login');         // 로그아웃후 메인화면으로 재접속
     console.log('로그아웃 완료!!');
 }
 
-// 회원가입 페이지를 출력합니다.
+/*
+    회원가입 페이지를 출력합니다.
+*/
 const GetSignupPage = (req, res) => {
     let htmlStream = ''; 
 
@@ -139,7 +132,9 @@ const GetSignupPage = (req, res) => {
                                     'url' : '../' }));
 };
 
-// 회원가입을 처리합니다.
+/*
+    회원가입을 처리합니다.
+*/
 const HandleSignup = (req, res) => {
     console.log('회원가입 요청 보냄');
     let sql_str1            = 'SELECT * FROM USER WHERE user_id = ?';

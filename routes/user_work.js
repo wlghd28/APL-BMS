@@ -6,6 +6,7 @@ const   bodyParser  = require('body-parser');
 const   session     = require('express-session');
 const   router      = express.Router();
 const   moment      = require('moment');
+const   async       = require('async');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
@@ -20,31 +21,84 @@ const db = mysql.createConnection({
 });
 
 
-// 업무 조회 페이지를 출력합니다.
+/* 
+    업무 조회 페이지를 출력합니다.
+*/
 const GetInquireWorkSheet = (req, res) => {
-    let htmlStream = ''; 
 
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    if (req.session.userid) {
+        let last_sql_str = '';
+        let this_sql_str = "SELECT * FROM THIS_WORK WHERE user_id = ?";
+        let future_sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+        let htmlStream = '';
+    
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
-    res.end(ejs.render(htmlStream, {
-                                    'title' :'업무관리 프로그램',
-                                    'url'   :'../' }));
+        let last_result, this_result, future_result;
+
+        // 지난업무, 금주업무, 예정업무 동기화 처리를 하기 위함
+        async.waterfall([
+            function(callback) {
+                db.query(this_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                        if (results.length <= 0)
+                            this_result = '없음';
+                        else {
+                            this_result = results[0].work;
+                        }
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
+                db.query(future_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                        if (results.length <= 0) 
+                            future_result = '없음';
+                        else {
+                            future_result = results[0].work;
+                        }
+                    }
+                    res.end(ejs.render(htmlStream, {
+                                                    'title' :'업무관리 프로그램',
+                                                    'url'   :'../../',
+                                                    'thisWork'  :this_result,
+                                                    'futureWork'  :future_result}));
+                });
+                callback(null);
+            }
+        ], function(error, result) {
+            if (error)
+                console.log(error);
+        }); 
+    } else {
+        let errorHtmlStream = '';
+        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        
+        res.status(562).end(ejs.render(errorHtmlStream));  
+    }
 };
 
-// 금주 업무 등록하는 페이지를 출력합니다.
+/*
+    금주 업무 등록하는 페이지를 출력합니다.
+*/
 const  GetThisWorkSheet = (req, res) => {   
-    let errorHtmlStream = '';
-    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
     
     // 로그인에 성공했을 경우에만 업무 등록을 할 수 있음
     if (req.session.userid) {
-        let sql_str     = "SELECT * FROM THIS_WORK WHERE user_id = ?";
+        let this_sql_str     = "SELECT * FROM THIS_WORK WHERE user_id = ?";
         let htmlStream  = '';
     
         htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    
@@ -52,7 +106,7 @@ const  GetThisWorkSheet = (req, res) => {
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); 
 
-        db.query(sql_str, [req.session.userid], (error, results) => {
+        db.query(this_sql_str, [req.session.userid], (error, results) => {
             if(error){
                 console.log(error);
                 res.end("error");
@@ -60,26 +114,29 @@ const  GetThisWorkSheet = (req, res) => {
                 if (results.length <= 0) {
                     res.end(ejs.render(htmlStream, {
                                                     'title' :'업무관리 프로그램',
-                                                    'url'   :'../../',
-                                                    'work'  :'등록된 내용이 없습니다' })); 
+                                                    'url'   :'../../'})); 
                 } else {
                     res.end(ejs.render(htmlStream, {
                                                     'title' :'업무관리 프로그램',
                                                     'url'   :'../../',
-                                                    'work'  :results[0].work })); 
+                                                    'thisWork'  :results[0].work })); 
                 }
             }
         });
     } else {
+        let errorHtmlStream = '';
+        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
         res.status(562).end(ejs.render(errorHtmlStream));  
     }
 };
-// 금주 업무 등록을 처리합니다.
+
+/*
+    금주 업무 등록을 처리합니다.
+*/
 const HandleThisWorkSheet = (req, res) => {
-    let errorHtmlStream = '';
-    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
     if (req.session.userid) {
         console.log('금주 업무 등록 요청보냄');
@@ -136,19 +193,22 @@ const HandleThisWorkSheet = (req, res) => {
             }
         });
     } else {
-            res.status(562).end(ejs.render(errorHtmlStream));  
+        let errorHtmlStream = '';
+        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        
+        res.status(562).end(ejs.render(errorHtmlStream));  
     }
 };
 
-// 예정된 업무를 등록하는 페이지를 출력합니다.
+/*
+    예정된 업무를 등록하는 페이지를 출력합니다.
+*/
 const  GetFutureWorkSheet = (req, res) => {   
-    let errorHtmlStream = '';
-    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
     
     if (req.session.userid) {
-        let sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+        let future_sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
         let htmlStream = '';
     
         htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');   
@@ -156,7 +216,7 @@ const  GetFutureWorkSheet = (req, res) => {
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
-        db.query(sql_str, [req.session.userid], (error, results) => {
+        db.query(future_sql_str, [req.session.userid], (error, results) => {
             if (error) {
                 console.log(error);
                 res.end("error");
@@ -164,27 +224,29 @@ const  GetFutureWorkSheet = (req, res) => {
                 if (results.length <= 0) {
                     res.end(ejs.render(htmlStream, {
                                                     'title' :'업무관리 프로그램',
-                                                    'url'   :'../../',
-                                                    'work'  :'등록된 내용이 없습니다' })); 
+                                                    'url'   :'../../'})); 
                 } else {
                     res.end(ejs.render(htmlStream, {
                                                     'title' :'업무관리 프로그램',
                                                     'url'   :'../../',
-                                                    'work'  :results[0].work })); 
+                                                    'futureWork'  :results[0].work })); 
                 }
             }
         });
     } else {
+        let errorHtmlStream = '';
+        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
         res.status(562).end(ejs.render(errorHtmlStream));  
     }
 };
 
-// 예정된 업무 등록을 처리합니다. 
+/*
+    예정된 업무 등록을 처리합니다. 
+*/
 const HandleFutureWorkSheet = (req, res) => {
-    let errorHtmlStream = '';
-    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
     if (req.session.userid) {
         console.log('예정된 업무 등록 요청보냄');
@@ -239,6 +301,11 @@ const HandleFutureWorkSheet = (req, res) => {
             }
         });
     } else {
+        let errorHtmlStream = '';
+        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
         res.status(562).end(ejs.render(errorHtmlStream));  
     }
 };
